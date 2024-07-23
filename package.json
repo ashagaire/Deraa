@@ -4,7 +4,9 @@
   "description": "This is a personal project , an web application for rental management system.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "npm start --prefix client",
+    "server": "npm start --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,9 @@
     "express": "^4.19.2",
     "nodemon": "^3.1.4",
     "pg": "^8.12.0"
-  }
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": []
 }
