@@ -29,15 +29,16 @@ const AddApartment = () => {
       Object.keys(form).forEach((key) => {
         formData.append(key, form[key]);
       });
-      const response = await fetch("http//localhost:5000/apartments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+      
+      const response = await axios.post("http://localhost:5000/apartments", form, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-      // const response = await axios.post("/api/apartments", form);
-      console.log(response);
+      console.log(response.data);
+      // window.location = "/";
     } catch (error) {
-      console.error(error);
+      console.error(error.response ? error.response.data : error.message);
     }
   };
 

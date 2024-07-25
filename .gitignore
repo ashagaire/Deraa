@@ -2,3 +2,6 @@
 /deraa
 /node_modules
 /server/node_modules
+/server/controllers
+/server/models
+/server/routes

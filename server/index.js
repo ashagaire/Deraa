@@ -1,25 +1,16 @@
 const express = require("express");
-const bodyParser = require('body-parser');
-const apartmentRoutes = require('./routes/apartmentRoutes');
+// const bodyParser = require('body-parser');
+// const apartmentRoutes = require('./routes/apartmentRoutes');
 const app = express();
 
 const cors = require("cors");
 const pool = require("./db");
 
-
 //middleware
 app.use(cors());
-// Middleware to check the size of headers
-// app.use((req, res, next) => {
-//     const headersSize = JSON.stringify(req.headers).length;
-//     if (headersSize > 8192) { // Adjust this value as needed
-//       return res.status(431).send('Request Header Fields Too Large');
-//     }
-//     next();
-//   });
 
 app.use(express.json());
-app.use('/api', apartmentRoutes);
+
 
 //ROUTES
 //Upload new apartment
@@ -30,10 +21,10 @@ app.post("/apartments", async(req,res) => {
       "INSERT INTO apartments (landlord_id, number_of_rooms, size, kitchen_included, bathroom_type, rent, address, description) VALUES ($1 ,$2, $3, $4, $5, $6, $7, $8) RETURNING *",
       [landlord_id, number_of_rooms, size, kitchen_included, bathroom_type, rent, address, description]
     );
-    res.json(newApartment);
-  } catch (error) {
+    res.json(newApartment.rows[0]);
+  } catch (err) {
     console.error(err.message);
-    
+    res.status(500).send("Server error");
   }
 
 });
