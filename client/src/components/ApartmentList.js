@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import "../style.css";
 import ListingCard from './ListingCard';
 
 const ApartmentList = () => {
   const [apartments, setApartments] = useState([]);
+  const location = useLocation();
+  const search = location.state;
 
   useEffect(() => {
-    const fetchApartments = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/apartments", {
-          headers: {
-            // Add only necessary headers
-            "Content-Type": "application/json",
-          },
-        });
-        setApartments(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    if (search) {
+      
+      const fetchApartments = async () => {
+        try {
+          const response = await axios.get("http://localhost:5000/apartments/search", {
+            
+            params: search,
+          });
+          setApartments(response.data);
+          console.log(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchApartments();
+    }
+    
 
-    fetchApartments();
-  }, []);
+    
+  }, [search]);
 
   return (
     <div>

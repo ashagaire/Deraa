@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import "../style.css";
 
-const ApartmentSearch = ({ onSearch }) => {
+const ApartmentSearch = () => {
   const [search, setSearch] = useState({
     number_of_rooms: "",
     size: "",
@@ -12,35 +12,23 @@ const ApartmentSearch = ({ onSearch }) => {
     address: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setSearch({
-      ...search,
+    setSearch((prevState) => ({
+      ...prevState,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      // Create form data to submit
-      const formData = new FormData();
-      Object.keys(form).forEach((key) => {
-        formData.append(key, form[key]);
-      });
-      
-      const response = await axios.get("http://localhost:5000/apartments", form, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log(response.data);
-      // window.location = "/";
-    } catch (error) {
-      console.error(error.response ? error.response.data : error.message);
-    }
-    onSearch();
-    // Implement search logic here
+    // Navigate to Listings page and pass the search data using state
+    navigate('/listings', {
+      state: search,
+    });
+    console.log(search)
   };
 
   return (

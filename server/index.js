@@ -29,28 +29,71 @@ app.post("/apartments", async(req,res) => {
 
 });
 
-//get all apartments 
-app.get("/apartments", async(req, res) =>{
+// get all apartments 
+// app.get("/apartments", async(req, res) =>{
+//   try {
+//     const allApartments = await pool.query("SELECT * FROM apartments")
+//     res.json(allApartments.rows);
+//   } catch (error) {
+//     console.error(err.message);
+//   }
+// });
+
+//get an apartment with apartment_id
+// app.get("/apartments/:id", async(req, res) =>{
+//   try {
+//     const {id} = req.params;
+//     const getApartment = await pool.query("SELECT * FROM apartments WHERE apartment_id = $1", [
+//       id
+//     ]);
+//     res.json(getApartment.rows);
+//   } catch (error) {
+//     console.error(err.message);
+//   }
+// });
+
+//search apartments
+app.get('/apartments/search', async (req, res) => {
   try {
-    const allApartments = await pool.query("SELECT * FROM apartments")
-    res.json(allApartments.rows);
+    const {
+      number_of_rooms,
+      size,
+      kitchen_included,
+      bathroom_type,
+      rent,
+      address,
+    } = req.query;
+
+    const searchQuery = `
+      SELECT * FROM apartments
+      WHERE ($1::text IS NULL OR number_of_rooms::text ILIKE $1)
+      AND ($2::text IS NULL OR size::text ILIKE $2)
+      AND ($3::boolean IS NULL OR kitchen_included = $3)
+      AND ($4::text IS NULL OR bathroom_type ILIKE $4)
+      AND ($5::text IS NULL OR rent::text ILIKE $5)
+      AND ($6::text IS NULL OR address ILIKE $6)
+    `;
+    const values = [
+      number_of_rooms ? `%${number_of_rooms}%` : null,
+      size ? `%${size}%` : null,
+      kitchen_included === 'true' ? true : null,
+      bathroom_type ? `%${bathroom_type}%` : null,
+      rent ? `%${rent}%` : null,
+      address ? `%${address}%` : null,
+    ];
+    console.log("Query Text:", searchQuery);
+    console.log("Query Values:", values);
+
+    const result = await pool.query(searchQuery, values);
+
+    res.json(result.rows);
+    
   } catch (error) {
-    console.error(err.message);
+    console.error('Error executing search query:', error);
+    res.status(500).send('Server error');
   }
 });
 
-//get an apartment with apartment_id
-app.get("/apartments/:id", async(req, res) =>{
-  try {
-    const {id} = req.params;
-    const getApartment = await pool.query("SELECT * FROM apartments WHERE apartment_id = $1", [
-      id
-    ]);
-    res.json(getApartment.rows);
-  } catch (error) {
-    console.error(err.message);
-  }
-});
 
 //update an apartment
 app.put("/apartments/:id", async(req,res) => {

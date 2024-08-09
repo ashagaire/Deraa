@@ -12,7 +12,7 @@ function App() {
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<SearchWithNavigation />} />
+        <Route path="/" element={<ApartmentSearch />} />
         <Route path="/upload" element={<AddApartment />} />
         <Route path="/listings" element={<ApartmentList />} />
       </Routes>
@@ -21,14 +21,14 @@ function App() {
 }
 
 // A wrapper component to handle navigation after search
-const SearchWithNavigation = () => {
-  const navigate = useNavigate();
+// const SearchWithNavigation = () => {
+//   const navigate = useNavigate();
 
-  // Function to handle search and navigate to Listings page
-  const handleSearch = () => {
-    navigate('/listings'); // Navigate to the Listings component
-  };
+//   // Function to handle search and navigate to Listings page
+//   const handleSearch = () => {
+//     navigate('/listings'); // Navigate to the Listings component
+//   };
 
-  return <ApartmentSearch onSearch={handleSearch} />;
-};
+//   return <ApartmentSearch onSearch={handleSearch} />;
+// };
 export default App;
