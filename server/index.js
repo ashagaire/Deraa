@@ -8,11 +8,13 @@ const pool = require("./db");
 
 //middleware
 app.use(cors());
-
 app.use(express.json());
 
 
 //ROUTES
+//register and login routes
+app.use("/auth", require("./routes/jwtAuth"));
+
 //Upload new apartment
 app.post("/apartments", async(req,res) => {
   try {

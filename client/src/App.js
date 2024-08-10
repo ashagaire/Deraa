@@ -13,7 +13,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<ApartmentSearch />} />
-        <Route path="/upload" element={<AddApartment />} />
+        <Route path="/upload" element={<UploadPage />} />
         <Route path="/listings" element={<ApartmentList />} />
       </Routes>
     </Router>
