@@ -1,15 +1,22 @@
 import {Link, useLocation} from "react-router-dom"
+import Login from "./Login"; 
+import { useState } from "react";
 
-const Header = () => {
+const Header = ({setAuth}) => {
+  // const [showLogin, setShowLogin] = useState(false);
+
+  // const handleLoginClick = () => {
+  //   setShowLogin(!showLogin);
+  // };
+
+
+
   return (
     <header class="flex flex-col relative z-20 shadow-md ">
       <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-      
-        
           <h1 class="font-semibold text-indigo-400">
           <Link to="/">Deera</Link>
           </h1>
-        
         <nav class="hidden md:flex item-center gap-4 lg:gap-6">
         <Link to="/" className="duration-200 hover:text-indigo-400 cursor-pointer">Search</Link>
          
@@ -20,6 +27,8 @@ const Header = () => {
           >
             FAQs
           </a>
+          <Link to="/login" className="duration-200 hover:text-indigo-400 cursor-pointer">{setAuth ? "Login" : "Logout"}</Link>  
+          
         </nav>
       </div>
     </header>

@@ -5,8 +5,10 @@ const app = express();
 
 const cors = require("cors");
 const pool = require("./db");
+const authorization = require("./middleware/authorization");
 
 //middleware
+
 app.use(cors());
 app.use(express.json());
 
@@ -14,6 +16,9 @@ app.use(express.json());
 //ROUTES
 //register and login routes
 app.use("/auth", require("./routes/jwtAuth"));
+
+//dashboard route
+app.use("/dashboard", require("./routes/dashboard"))
 
 //Upload new apartment
 app.post("/apartments", async(req,res) => {

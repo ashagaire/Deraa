@@ -29,12 +29,16 @@ const AddApartment = () => {
       Object.keys(form).forEach((key) => {
         formData.append(key, form[key]);
       });
-      
-      const response = await axios.post("http://localhost:5000/apartments", form, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+
+      const response = await axios.post(
+        "http://localhost:5000/apartments",
+        form,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(response.data);
       // window.location = "/";
     } catch (error) {

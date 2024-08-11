@@ -1,19 +1,13 @@
+import React, { useState, Fragment } from "react";
+import ApartmentSearch from "../components/ApartmentSearch";
+import ApartmentList from "../components/ApartmentList";
 
-// import React, { useState } from "react";
-// import ApartmentSearch from '../components/ApartmentSearch';
-// import ApartmentList from '../components/ApartmentList';
+const HomePage = () => {
+  return (
+    <div className=" mx-auto">
+      <ApartmentSearch />
+    </div>
+  );
+};
 
-
-// const HomePage = ({onSearch}) => {
-
-//   return (
-    
-//     <div className=" mx-auto">
-      
-//       <ApartmentSearch incaseSearch={onSearch}/>
-      
-//     </div>
-//   );
-// };
-
-// export default HomePage;
+export default HomePage;
