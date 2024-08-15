@@ -1,13 +1,16 @@
 import {Link, useLocation} from "react-router-dom"
 import Login from "./Login"; 
+import { useAuth } from '../AuthProvider';
 import { useState } from "react";
 
-const Header = ({setAuth}) => {
-  // const [showLogin, setShowLogin] = useState(false);
+const Header = () => {
+  const { isAuthenticated ,setAuth } = useAuth();
 
-  // const handleLoginClick = () => {
-  //   setShowLogin(!showLogin);
-  // };
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    setAuth(false);
+  };
 
 
 
@@ -27,7 +30,12 @@ const Header = ({setAuth}) => {
           >
             FAQs
           </a>
-          <Link to="/login" className="duration-200 hover:text-indigo-400 cursor-pointer">{setAuth ? "Login" : "Logout"}</Link>  
+          {isAuthenticated ? (
+              <button onClick={e=> handleLogout(e)}>LogOut</button>
+            ) : (
+              <Link to="/login">LogIn</Link>
+            )}
+          
           
         </nav>
       </div>

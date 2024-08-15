@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import {Link} from "react-router-dom";
+import { useAuth } from '../AuthProvider';
 import axios from "axios";
+// import toast from 'react-toastify';
 
-const Login = ({ setAuth }) => {
+const Login = () => {
+  const { setAuth } = useAuth();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -55,8 +59,11 @@ const Login = ({ setAuth }) => {
           }
         );
         const parseRes = response.data;
+
+        
         localStorage.setItem("token", parseRes.token);
         setAuth(true);
+        
       } catch (error) {
         console.error(error.response ? error.response.data : error.message);
       }
@@ -120,6 +127,7 @@ const Login = ({ setAuth }) => {
           Login
         </button>
       </form>
+      <Link to="/registration" >Register </Link>
     </div>
   );
 };

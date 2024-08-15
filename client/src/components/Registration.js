@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import {Link} from "react-router-dom";
+import { useAuth } from '../AuthProvider';
 import axios from "axios";
 
-const Registration = ({ setAuth }) => {
+const Registration = () => {
+  const { setAuth } = useAuth();
+
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -177,6 +181,7 @@ const Registration = ({ setAuth }) => {
         >
           Register
         </button>
+        <Link to="/login" >Login </Link>
       </form>
     </div>
   );
