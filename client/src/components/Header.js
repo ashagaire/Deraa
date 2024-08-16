@@ -1,7 +1,9 @@
 import {Link, useLocation} from "react-router-dom"
+import React from 'react';
 import Login from "./Login"; 
 import { useAuth } from '../AuthProvider';
 import { useState } from "react";
+import {toast} from 'react-toastify';
 
 const Header = () => {
   const { isAuthenticated ,setAuth } = useAuth();
@@ -10,6 +12,7 @@ const Header = () => {
     e.preventDefault();
     localStorage.removeItem("token");
     setAuth(false);
+    toast.success("Logout successfull");
   };
 
 

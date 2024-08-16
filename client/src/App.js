@@ -10,8 +10,8 @@ import ApartmentSearch from "./components/ApartmentSearch";
 import Login from "./components/Login";
 import { useAuth } from "./AuthProvider";
 import Registration from "./components/Registration";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -44,7 +44,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
     </Fragment>
   );
 }

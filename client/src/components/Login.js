@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import {Link} from "react-router-dom";
-import { useAuth } from '../AuthProvider';
+import { Link } from "react-router-dom";
+import { useAuth } from "../AuthProvider";
 import axios from "axios";
-// import toast from 'react-toastify';
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { setAuth } = useAuth();
@@ -59,13 +59,20 @@ const Login = () => {
           }
         );
         const parseRes = response.data;
+        if (parseRes.token) {
+          localStorage.setItem("token", parseRes.token);
+          setAuth(true);
 
-        
-        localStorage.setItem("token", parseRes.token);
-        setAuth(true);
+          toast.success("Login successfull");
+        } 
         
       } catch (error) {
-        console.error(error.response ? error.response.data : error.message);
+       
+        const errorMessage = error.response
+          ? error.response.data
+          : error.message;
+        setAuth(false);
+        toast.error(errorMessage);
       }
     }
   };
@@ -127,7 +134,7 @@ const Login = () => {
           Login
         </button>
       </form>
-      <Link to="/registration" >Register </Link>
+      <Link to="/registration">Register </Link>
     </div>
   );
 };

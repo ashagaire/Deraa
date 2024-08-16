@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {Link} from "react-router-dom";
 import { useAuth } from '../AuthProvider';
 import axios from "axios";
+import {toast} from 'react-toastify';
 
 const Registration = () => {
   const { setAuth } = useAuth();
@@ -71,10 +72,19 @@ const Registration = () => {
           }
         );
         const parseRes = response.data;
-        localStorage.setItem("token", parseRes.token);
-        setAuth(true);
+        if (parseRes.token) {
+          localStorage.setItem("token", parseRes.token);
+          setAuth(true);
+          
+          toast.success("Registration successfull");
+        } 
+        
       } catch (error) {
-        console.error(error.response ? error.response.data : error.message);
+        const errorMessage = error.response
+          ? error.response.data
+          : error.message;
+        setAuth(false);
+        toast.error(errorMessage);
       }
     }
   };
