@@ -135,6 +135,7 @@ const Login = () => {
         </button>
       </form>
       <Link to="/registration">Register </Link>
+      <Link to="/forgot-password">Forgot Password </Link>
     </div>
   );
 };

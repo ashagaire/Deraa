@@ -71,13 +71,15 @@ const Registration = () => {
             },
           }
         );
-        const parseRes = response.data;
-        if (parseRes.token) {
-          localStorage.setItem("token", parseRes.token);
-          setAuth(true);
+        console.log(response.data)
+        toast.success("Registration successfull");
+        // const parseRes = response.data;
+        // if (parseRes.token) {
+        //   localStorage.setItem("token", parseRes.token);
+        //   setAuth(true);
           
-          toast.success("Registration successfull");
-        } 
+        //   toast.success("Registration successfull");
+        // } 
         
       } catch (error) {
         const errorMessage = error.response

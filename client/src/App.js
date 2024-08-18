@@ -10,6 +10,9 @@ import ApartmentSearch from "./components/ApartmentSearch";
 import Login from "./components/Login";
 import { useAuth } from "./AuthProvider";
 import Registration from "./components/Registration";
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
+import EmailVerification from './components/EmailVerification'; 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,6 +28,9 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/verify-email/:token" element={<EmailVerification />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route
               exact
               path="/registration"
