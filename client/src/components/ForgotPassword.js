@@ -10,7 +10,7 @@ const ForgotPassword = () => {
 
         try {
             // Send a request to the backend to initiate the password reset process
-            const response = await axios.post('/auth/forgot-password', { email });
+            const response = await axios.post('http://localhost:5000/auth/forgot-password',  {email} );
             setMessage(response.data); // Display a success message from the server
         } catch (error) {
             // Handle errors (e.g., network errors, server errors)

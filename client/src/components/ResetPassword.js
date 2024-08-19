@@ -12,17 +12,17 @@ const ResetPassword = () => {
 
         try {
             // Send the new password to the backend with the token
-            const response = await axios.post(`/auth/reset-password/${token}`, { newPassword });
+            const response = await axios.post(`http://localhost:5000/auth/reset-password/${token}`, { newPassword });
 
             // Display a message to the user
-            alert(response.data);
+            console.log(response.data);
 
             // If the response was successful, navigate to the login page
             navigate('/login');
         } catch (error) {
             // Handle errors (e.g., network errors, server errors)
             console.error('Error resetting password:', error);
-            alert('Failed to reset password. Please try again.');
+            console.log('Failed to reset password. Please try again.');
         }
     };
 

@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes ,Navigate} from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
 import UploadPage from "./pages/UploadPage";
@@ -32,14 +32,12 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route
-              exact
               path="/registration"
-              element={!isAuthenticated ? <Registration /> : <Login />}
+              element={isAuthenticated ? <Navigate to="/" /> : <Registration />}
             />
             <Route
-              exact
               path="/login"
-              element={!isAuthenticated ? <Login /> : <HomePage />}
+              element={isAuthenticated ? <Navigate to="/" /> : <Login />}
             />
 
             <Route
