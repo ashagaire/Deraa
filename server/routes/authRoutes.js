@@ -108,11 +108,11 @@ router.post('/forgot-password', async (req, res) => {
         const resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
 
         await query(
-            `UPDATE users SET reset_password_token = $1, reset_password_expires = $2 WHERE id = $3`,
-            [resetToken, resetPasswordExpires, user.id]
+            `UPDATE users SET reset_password_token = $1, reset_password_expires = $2 WHERE user_id = $3`,
+            [resetToken, resetPasswordExpires, user.user_id]
         );
 
-        const resetLink = `http://${req.headers.host}/auth/reset-password/${resetToken}`;
+        const resetLink = `${process.env.SERVER_URL}/auth/reset-password/${resetToken}`;
         await sendPasswordResetEmail(user.email, resetLink);
 
         res.status(200).send('Password reset email sent.');
@@ -138,11 +138,12 @@ router.post('/reset-password/:token', async (req, res) => {
         }
 
         const user = result.rows[0];
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const bcryptPassword = await bcrypt.hash(newPassword, salt);
+        
 
         await query(
-            `UPDATE users SET password = $1, reset_password_token = NULL, reset_password_expires = NULL WHERE id = $2`,
-            [hashedPassword, user.id]
+            `UPDATE users SET password = $1, reset_password_token = NULL, reset_password_expires = NULL WHERE user_id = $2`,
+            [bcryptPassword, user.user_id]
         );
 
         res.status(200).send('Password has been reset successfully.');

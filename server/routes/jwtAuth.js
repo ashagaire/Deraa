@@ -9,6 +9,7 @@ const {
   sendVerificationEmail,
   sendPasswordResetEmail,
 } = require("./emailService");
+require("dotenv").config();
 
 //Register Route
 router.post("/register", validInfo, async (req, res) => {
@@ -40,12 +41,14 @@ router.post("/register", validInfo, async (req, res) => {
         );
 
         //4. Send new verification email
-        const newVerificationLink = `http://${req.headers.host}/auth/verify-email/${newVerificationToken}`;
+        const newVerificationLink = `${process.env.SERVER_URL}/auth/redirect-to-verification/${newVerificationToken}`;
         await sendVerificationEmail(email, newVerificationLink);
 
         return res
           .status(200)
-          .send("Verification email is sent again, please verify user account.");
+          .send(
+            "Verification email is sent again, please verify user account."
+          );
       } else {
         // User already verified or no verification token (handle as needed)
         return res.status(401).send("User already exists. Please Log in.");
@@ -66,7 +69,7 @@ router.post("/register", validInfo, async (req, res) => {
     );
 
     //5. send email verification link
-    const verificationLink = `http://localhost:3000/verify-email/${verificationToken}`;
+    const verificationLink = `${process.env.SERVER_URL}/auth/redirect-to-verification/${verificationToken}`;
     await sendVerificationEmail(email, verificationLink);
 
     res
@@ -74,12 +77,16 @@ router.post("/register", validInfo, async (req, res) => {
       .send(
         "Registration successful. Please check your email for verification link. from server"
       );
-    console.log("Registration successful from server.");
-
   } catch (err) {
-    console.error("Error during registration:", err.message);
     res.status(500).send("Server Error");
   }
+});
+
+// Redirect route to handle email verification redirection
+router.get("/redirect-to-verification/:token", (req, res) => {
+  const { token } = req.params;
+  const verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}`;
+  res.redirect(verificationLink);
 });
 
 // Email Verification Route
@@ -100,10 +107,79 @@ router.get("/verify-email/:token", async (req, res) => {
 
     res.status(200).send("Email verified successfully. You can now log in.");
   } catch (error) {
-    console.error("Error during email verification:", error);
-    res.status(500).send("Server error. please register again.");
+    res.status(500).send("Server error.");
   }
 });
+
+// Password Reset Request Route
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+
+    if (result.rowCount === 0) {
+      return res.status(400).send("No account with that email address exists.");
+    }
+
+    const user = result.rows[0];
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+
+    await pool.query(
+      `UPDATE users SET reset_password_token = $1, reset_password_expires = $2 WHERE user_id = $3`,
+      [resetToken, resetPasswordExpires, user.user_id]
+    );
+
+    const resetLink = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    await sendPasswordResetEmail(user.email, resetLink);
+
+    res.status(200).send("Password reset email sent.");
+  } catch (error) {
+    console.error("Error during password reset request:", error);
+    res.status(500).send("Server error");
+  }
+});
+
+// Password Reset Route
+router.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  const saltRound = 10;
+  const salt = await bcrypt.genSalt(saltRound);
+
+  console.log("from reset password route");
+  try {
+    console.log(req.body);
+    const result = await pool.query(
+      `SELECT * FROM users WHERE reset_password_token = $1 AND reset_password_expires > NOW()`,
+      [token]
+    );
+
+    if (result.rowCount === 0) {
+      return res
+        .status(400)
+        .send("Password reset token is invalid or has expired.");
+    }
+
+    const user = result.rows[0];
+    const bcryptPassword = await bcrypt.hash(newPassword, salt);
+
+    await pool.query(
+      `UPDATE users SET password_hash = $1, reset_password_token = NULL, reset_password_expires = NULL WHERE user_id = $2`,
+      [bcryptPassword, user.user_id]
+    );
+
+    res.status(200).send("Password has been reset successfully.");
+  } catch (error) {
+    console.error("Error during password reset:", error);
+    res.status(500).send("Server error");
+  }
+});
+
 //Login route
 router.post("/login", validInfo, async (req, res) => {
   try {

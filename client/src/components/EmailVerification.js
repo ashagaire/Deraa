@@ -8,15 +8,14 @@ const EmailVerification = memo(() => {
   const [statusCode, setStatusCode] = useState(null); // To track status code
   const [hasVerified, setHasVerified] = useState(false); // Flag to check if already verified
 
-  console.log("EmailVerification render");
+  
 
   useEffect(() => {
-    console.log('Component mounted or token changed');
-    console.log('hasVerified:', hasVerified);
+    
     const verifyEmail = async () => {
       if (hasVerified) return; // Skip if already verified
       setHasVerified(true); // Set flag to prevent future calls
-      console.log("Calling verifyEmail");
+      
       try {
         const response = await axios.get(`http://localhost:5000/auth/verify-email/${token}`);
         setMessage(response.data);

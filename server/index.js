@@ -132,6 +132,11 @@ app.delete("/apartments/:id", async(req, res) =>{
   }
 });
 
+// Catch-all route for undefined paths (this should be last)
+app.use((req, res) => {
+  res.status(404).send("Not Found");
+});
+
 app.listen(5000, ()=> {
     console.log("server has started on port 5000");
 });

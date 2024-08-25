@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const {createTransport } = require('nodemailer');
+const { createTransport } = require("nodemailer");
 require("dotenv").config();
 
 const transporter = createTransport({
@@ -15,38 +15,36 @@ const transporter = createTransport({
 const sendVerificationEmail = async (email, verificationLink) => {
   const mailOptions = {
     from: "asha.gaire95@gmail.com",
-    to: email ,
+    to: email,
     subject: "Email Verification",
     text: "Hello world?",
     html: `<strong>Please verify your email by clicking on the following link:</strong> <a href="${verificationLink}">Verify Email</a>`,
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`Message sent: ${info.messageId}`);
+    await transporter.sendMail(mailOptions);
+    // console.log(`Message sent: ${info.messageId}`);
   } catch (error) {
     console.error("Error sending email:", error);
   }
-
-  // transporter.sendMail(mailoptions, (error, info) => {
-  //   if (error) {
-  //     return console.log(error);
-  //   }
-  //   console.log("Message sent: %s", info.messageId);
-  // });
-
 };
 
 const sendPasswordResetEmail = async (email, resetLink) => {
-  const emailData = {
-    to: [{ email }],
-    sender: { email: "noreply@yourdomain.com" },
+  // const emailData = {
+  //   to: [{ email }],
+  //   sender: { email: "noreply@yourdomain.com" },
+  //   subject: "Password Reset",
+  //   htmlContent: `<strong>You requested a password reset. Click on the following link to reset your password:</strong> <a href="${resetLink}">Reset Password</a>`,
+  // };
+  const mailOptions = {
+    from: "asha.gaire95@gmail.com",
+    to: email,
     subject: "Password Reset",
-    htmlContent: `<strong>You requested a password reset. Click on the following link to reset your password:</strong> <a href="${resetLink}">Reset Password</a>`,
+    html: `<strong>You requested a password reset. Click on the following link to reset your password:</strong>  <a href="${resetLink}">Reset Password</a>`,
   };
 
   try {
-    await apiInstance.sendTransacEmail(emailData);
+    await transporter.sendMail(mailOptions);
     console.log("Password reset email sent to:", email);
   } catch (error) {
     console.error("Error sending email:", error);
