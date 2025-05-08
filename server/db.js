@@ -5,7 +5,7 @@ const pool = new Pool({
   password: "Butwal8",
   host: "localhost",
   port: 5432,
-  database: "deraa",
+  database: "Deraa",
 });
 
 
