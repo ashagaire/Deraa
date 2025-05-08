@@ -32,9 +32,7 @@ router.post('/register', async (req, res) => {
         await sendVerificationEmail(email, verificationLink);
 
         res.status(200).send('Registration successful. Please check your email for verification link. to client side');
-        console.log('Registration successful from server.')
     } catch (error) {
-        console.error('Error during registration:', error);
         res.status(500).send('Server error');
     }
 });
@@ -54,9 +52,7 @@ router.get('/verify-email/:token', async (req, res) => {
         }
 
         res.status(200).send('Email verified successfully. You can now log in.');
-        console.log("Email verified successfully. You can now log in.from server")
     } catch (error) {
-        console.error('Error during email verification:', error);
         res.status(500).send('Server error');
     }
 });
@@ -87,7 +83,6 @@ router.post('/login', async (req, res) => {
         const token = generateToken(user.id);
         res.status(200).json({ token });
     } catch (error) {
-        console.error('Error during login:', error);
         res.status(500).send('Server error');
     }
 });
@@ -117,7 +112,6 @@ router.post('/forgot-password', async (req, res) => {
 
         res.status(200).send('Password reset email sent.');
     } catch (error) {
-        console.error('Error during password reset request:', error);
         res.status(500).send('Server error');
     }
 });
@@ -147,7 +141,6 @@ router.post('/reset-password/:token', async (req, res) => {
 
         res.status(200).send('Password has been reset successfully.');
     } catch (error) {
-        console.error('Error during password reset:', error);
         res.status(500).send('Server error');
     }
 });

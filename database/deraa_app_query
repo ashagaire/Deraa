@@ -1,0 +1,36 @@
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password_hash TEXT NOT NULL,
+    verification_token VARCHAR(255)
+);
+
+CREATE TABLE apartments (
+    apartment_id SERIAL PRIMARY KEY,
+    landlord_id INT REFERENCES users(user_id),
+    number_of_rooms INT,
+    size DECIMAL(10, 2),
+    kitchen_included BOOLEAN,
+    bathroom_type VARCHAR(50),
+    rent DECIMAL(10, 2),
+    address VARCHAR(255),
+    description TEXT
+);
+CREATE TABLE images (
+    image_id SERIAL PRIMARY KEY,
+    apartment_id INT REFERENCES apartments(apartment_id),
+    image_url VARCHAR(255)
+);
+
+--Insert a sample user (landlord)
+-- INSERT INTO users (username, email, password_hash)
+-- VALUES ('landlord123', 'landlord@example.com', 'securepassword');
+
+--Insert a sample apartment
+INSERT INTO apartments (landlord_id, number_of_rooms, size, kitchen_included, bathroom_type, rent, address, description)
+VALUES (1, 2, 80.5, TRUE, 'Private', 1200.00, '123 Main St', 'Spacious apartment with great views.');
+
+--Insert a sample image URL for the apartment
+-- INSERT INTO images (apartment_id, image_url)
+-- VALUES (1, 'https://example.com/images/apartment1.jpg');
